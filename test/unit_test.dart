@@ -379,21 +379,142 @@ void main() {
 
       service.addTask(Task(
         id: '1', 
-        title: 'This is a task', 
+        title: 'High Priority', 
         dueDate: DateTime.now(),
         priority: Priority.high,
       ));
 
       service.addTask(Task(
         id: '2', 
-        title: 'This is another task', 
+        title: 'Medium Priority', 
+        dueDate: DateTime.now(),
+        priority: Priority.medium,
+      ));
+
+      service.addTask(Task(
+        id: '3', 
+        title: 'Low Priority', 
         dueDate: DateTime.now(),
         priority: Priority.low,
       ));
     });
 
-    test('', () {
-      
+    test('Sorts task with high priority first', () {
+      final sorted = service.sortByPriority();
+
+      expect(sorted.first.priority, Priority.high);
+      expect(sorted.last.priority, Priority.low);
     });
+
+    test('Originial task list remains unchanged', () {
+      final originalFirst = service.allTasks.first;
+
+      service.sortByPriority();
+
+      expect(service.allTasks.first, originalFirst);
+    });
+  });
+
+  group('TaskService — sortByDueDate()', () {
+    late TaskService service;
+
+    setUp(() {
+      service = TaskService();
+
+      service.addTask(Task(
+        id: '1', 
+        title: 'High Priority', 
+        dueDate: DateTime(2026, 5, 7),
+      ));
+
+      service.addTask(Task(
+        id: '2', 
+        title: 'Medium Priority', 
+        dueDate: DateTime(2026, 6, 7),
+      ));
+
+      service.addTask(Task(
+        id: '3', 
+        title: 'Low Priority', 
+        dueDate: DateTime(2026, 7, 7),
+      ));
+    });
+
+    test('Sorts task with the earliest due date first', () {
+      service.sortByDueDate();
+
+      expect(service.allTasks.first.dueDate, DateTime(2026, 5, 7));
+    });
+
+    test('Original task list remain unchanged', () {
+      final originalTask = service.allTasks.first;
+
+      service.sortByDueDate();
+
+      expect(service.allTasks.first, originalTask);
+    });
+  });
+
+  group('TaskService — statistics getter', () {
+    late TaskService service;
+
+    setUp(() {
+      service = TaskService();
+    });
+
+    test('returns 0 counts when no tasks exist', () {
+      final stats = service.statistics;
+
+      expect([
+        stats['total'],
+        stats['completed'],
+        stats['overdue'],
+      ], [
+        0,
+        0,
+        0,
+      ]);
+    });
+    
+    test('counts total and completed tasks correctly', () {
+        service.addTask(Task(
+          id: '1',
+          title: 'Completed Task',
+          dueDate: DateTime(2026, 3, 20),
+          isCompleted: true,
+        ));
+
+        service.addTask(Task(
+          id: '2',
+          title: 'Active Task',
+          dueDate: DateTime(2026, 3, 21),
+          isCompleted: false,
+        ));
+
+        final stats = service.statistics;
+
+        expect(stats['total'], 2);
+        expect(stats['completed'], 1);
+      });
+
+      test('counts overdue tasks correctly', () {
+        service.addTask(Task(
+          id: '1',
+          title: 'Overdue Task',
+          dueDate: DateTime.now().subtract(const Duration(days: 1)),
+          isCompleted: false,
+        ));
+
+        service.addTask(Task(
+          id: '2',
+          title: 'Completed Task',
+          dueDate: DateTime.now().subtract(const Duration(days: 1)),
+          isCompleted: true,
+        ));
+
+        final stats = service.statistics;
+
+        expect(stats['overdue'], 1);
+      });
   });
 }
