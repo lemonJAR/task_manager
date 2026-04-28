@@ -7,7 +7,7 @@ on:
     branches: [ main ]
  
 env:
-  FLUTTER_VERSION: '3.19.0'
+  FLUTTER_VERSION: '3.32.8'
  
 jobs:
   # ──────────────────────────────────────────────
@@ -23,7 +23,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.1'
+          flutter-version: '3.32.8'
           channel: 'stable'
           cache: true
  
@@ -50,7 +50,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.1'
+          flutter-version: '3.32.8'
           channel: 'stable'
           cache: true
  
@@ -102,7 +102,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.1'
+          flutter-version: '3.32.8'
           channel: 'stable'
           cache: true
  
@@ -140,7 +140,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.1'
+          flutter-version: '3.32.8'
           channel: 'stable'
           cache: true
  
